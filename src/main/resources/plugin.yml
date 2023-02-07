@@ -1,0 +1,10 @@
+name: Staffmode
+version: '${project.version}'
+main: tk.baconing.staffmode.Staffmode
+api-version: 1.19
+prefix: [ StaffMode ]
+depend: [ LuckPerms ]
+softdepend: [ PlaceholderAPI ]
+authors: [ Baconing ]
+description: Plugin that sets a context when a player does /staffmode.
+website: https://baconing.tk
