@@ -1,16 +1,102 @@
 package tk.baconing.staffmode.managers;
 
+import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.dao.DaoManager;
+import com.j256.ormlite.jdbc.JdbcConnectionSource;
+import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.support.ConnectionSource;
+import com.j256.ormlite.table.TableUtils;
+import org.bukkit.entity.Player;
+import tk.baconing.staffmode.entities.User;
+
+import javax.annotation.Nullable;
+import java.sql.SQLException;
 
 public class DatabaseManager {
-    private String databaseUrl;
-    private ConnectionSource connectionSource;
+    private static String databaseUrl;
+    private static ConnectionSource connectionSource;
+    private static Dao<User, Integer> userDao;
 
-    public void initialize() {
-
+    public static void initialize(String databaseUrl) throws SQLException {
+        DatabaseManager.databaseUrl = databaseUrl;
+        connectionSource = new JdbcConnectionSource(databaseUrl);
+        userDao = DaoManager.createDao(connectionSource, User.class);
+        TableUtils.createTableIfNotExists(connectionSource, User.class);
     }
 
-    public class DatabaseQueries {
+    public static ConnectionSource getConnectionSource() {
+        return connectionSource;
+    }
 
+    public static Dao<User, Integer> getUserDao() {
+        return userDao;
+    }
+
+    public static String getDatabaseUrl() {
+        return databaseUrl;
+    }
+
+    public static void setDatabaseUrl(String databaseUrl) {
+        DatabaseManager.databaseUrl = databaseUrl;
+    }
+
+    public static class DatabaseQueries {
+
+        public static void enableStaffMode(User user, Player player, String serializedData) {
+            user.setStaffMode(true);
+            user.setSerializedData(serializedData);
+        }
+
+        public static String disableStaffMode(User user, Player player) {
+            //TODO
+            user.setStaffMode(false);
+            return user.getSerializedData();
+        }
+
+        public static void createUser(User user) {
+            userDao = DatabaseManager.getUserDao();
+            try {
+                userDao.create(user);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        @Nullable
+        public static User getUserByName(String name) {
+            userDao = DatabaseManager.getUserDao();
+            try {
+                QueryBuilder<User, Integer> qb = userDao.queryBuilder();
+                qb.where().eq("username", name);
+                return userDao.queryForFirst(qb.prepare());
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        @Nullable
+        public static User getUserByUUID(String uuid) {
+            userDao = DatabaseManager.getUserDao();
+            try {
+                QueryBuilder<User, Integer> qb = userDao.queryBuilder();
+                qb.where().eq("uuid", uuid);
+                return userDao.queryForFirst(qb.prepare());
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        @Nullable
+        public static User getUserByID(int id) {
+            //TODO
+            userDao = DatabaseManager.getUserDao();
+            try {
+                QueryBuilder<User, Integer> qb = userDao.queryBuilder();
+                qb.where().eq("id", id);
+                return userDao.queryForFirst(qb.prepare());
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }

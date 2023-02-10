@@ -6,16 +6,11 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.sql.Array;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 
 public class PlayerSerializer{
     public static String serialize(Player player) {
@@ -44,7 +39,7 @@ public class PlayerSerializer{
         return obj.toString();
     }
 
-    public static void deSerialize(String data, Player player) throws IOException {
+    public static void deSerialize(String data, Player player) {
         JSONObject obj = new JSONObject(data);
 
         ItemStack[][] inventoryArray = InventorySerializer.deserialize(obj.getString("inventory"));

@@ -1,0 +1,3 @@
+databaseurl: "jdbc:mysql://localhost:3306/database?user=user&password=pass"
+
+staffmodegamemode: SPECTATOR

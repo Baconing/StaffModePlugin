@@ -7,19 +7,19 @@ import javax.annotation.Nullable;
 
 @DatabaseTable
 public class User {
-    @DatabaseField(generatedId = true)
+    @DatabaseField(generatedId = true, canBeNull = false)
     private int id;
 
-    @DatabaseField()
+    @DatabaseField(canBeNull = false)
     private String uuid;
 
-    @DatabaseField()
+    @DatabaseField(canBeNull = false)
     private String username;
 
     @DatabaseField()
     private @Nullable String serializedData;
 
-    @DatabaseField()
+    @DatabaseField(canBeNull = false)
     private boolean isStaffMode;
 
     public int getId() {

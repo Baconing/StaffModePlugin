@@ -6,5 +6,11 @@ prefix: "StaffMode"
 depend: [  ]
 softdepend: [ PlaceholderAPI ]
 authors: [ Baconing ]
-description: Plugin that sets a context when a player does /staffmode.
+description: Plugin that sets a LuckPerms context when a player does /staffmode.
 website: https://baconing.tk
+commands:
+  staffmode:
+    description: Set a player's staff mode.
+    aliases: ["staff", "sm", "smode", "staffm", "adminmode", "am", "amode", "adminm"]
+    permission: staffmode.toggle
+    usage: "&c/staffmode [player]"

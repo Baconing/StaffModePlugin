@@ -8,7 +8,7 @@ import tk.baconing.staffmode.StaffMode;
 import tk.baconing.staffmode.serializers.PlayerSerializer;
 
 import java.io.IOException;
-
+// temporary testing class
 public class ChatListener implements Listener {
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent e) {
@@ -19,11 +19,7 @@ public class ChatListener implements Listener {
         BukkitRunnable task = new BukkitRunnable() {
             @Override
             public void run() {
-                try {
-                    PlayerSerializer.deSerialize(data, e.getPlayer());
-                } catch (IOException ex) {
-                    e.getPlayer().sendMessage("failed :( .... " + ex.getMessage());
-                }
+                PlayerSerializer.deSerialize(data, e.getPlayer());
             }
         };
         task.runTaskLater(StaffMode.get(), 300);
