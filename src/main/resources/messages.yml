@@ -14,8 +14,8 @@ staffmodeDisabledByOther: "&cStaff mode disabled for %playerName%"
 # %player% is the only variable for playerNotFound
 playerNotFound: "&cPlayer %player% not found."
 
-staffmodeBroadcastEnabled: "&a%player% enabled staff mode."
-staffmodeBroadcastDisabled: "&c%player% disabled staff mode."
+staffmodeBroadcastEnabled: "&a%playerName% enabled staff mode."
+staffmodeBroadcastDisabled: "&c%playerName% disabled staff mode."
 
 # %staffStatus% variable
 staffStatus:
