@@ -61,7 +61,7 @@ public final class StaffMode extends JavaPlugin {
             public void run() {
                 Bukkit.getOnlinePlayers().forEach(player -> {
                     User u = DatabaseManager.DatabaseQueries.getUser(player);
-                    if (!(player.hasPermission("staffmode.toggle")) && u.isStaffMode() && !(u.isEnabledByOther())) StaffModeManager.disableStaffMode(player, u);
+                    if (!(player.hasPermission("staffmode.toggle")) && u.isStaffMode() && Boolean.FALSE.equals(u.isEnabledByOther())) StaffModeManager.disableStaffMode(player, u);
                 });
             }
         };
