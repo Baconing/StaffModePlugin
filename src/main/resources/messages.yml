@@ -1,0 +1,29 @@
+#TODO: custom messages
+
+
+# Variables:
+# %playerDisplayName%
+# %playerName%
+# %playerUUID%
+# %staffStatus%
+staffmodeEnabled: "&aStaff mode enabled."
+staffmodeDisabled: "&cStaff mode disabled."
+
+staffmodeEnabledByOther: "&aStaff mode enabled for %playerName%"
+staffmodeDisabledByOther: "&cStaff mode disabled for %playerName%"
+# %player% is the only variable for playerNotFound
+playerNotFound: "&cPlayer %player% not found."
+
+staffmodeBroadcastEnabled: "&a%player% enabled staff mode."
+staffmodeBroadcastDisabled: "&c%player% disabled staff mode."
+
+# %staffStatus% variable
+staffStatus:
+  enabled: "Enabled"
+  disabled: "Disabled"
+
+
+# %staffmode_status% (only used with placeholderapi)
+placeholderAPI:
+  staffEnabled: "Enabled"
+  staffDisabled: "Disabled"

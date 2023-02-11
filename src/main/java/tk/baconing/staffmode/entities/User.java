@@ -6,7 +6,7 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import javax.annotation.Nullable;
 
-@DatabaseTable()
+@DatabaseTable(tableName = "staffmode_users")
 public class User {
     @DatabaseField(generatedId = true, canBeNull = false)
     private int id;
@@ -22,6 +22,9 @@ public class User {
 
     @DatabaseField(canBeNull = false)
     private boolean isStaffMode;
+
+    @DatabaseField()
+    private @Nullable Boolean isEnabledByOther;
 
     public int getId() {
         return id;
@@ -62,5 +65,14 @@ public class User {
 
     public void setStaffMode(boolean staffMode) {
         isStaffMode = staffMode;
+    }
+
+    @Nullable
+    public Boolean isEnabledByOther() {
+        return isEnabledByOther;
+    }
+
+    public void setEnabledByOther(@Nullable Boolean enabledByOther) {
+        isEnabledByOther = enabledByOther;
     }
 }

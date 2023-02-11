@@ -14,16 +14,17 @@ public class StaffModeTabComplete implements TabCompleter {
     @Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        List<String> list = new ArrayList<String>();
         if (sender.hasPermission("staffmode.toggle.others")) {
-            List<String> list = new ArrayList<String>();
             Bukkit.getOnlinePlayers().forEach(player -> {
                 list.add(player.getName());
             });
-            return list;
-        } else {
-            List<String> list = new ArrayList<String>();
-            list.add(sender.getName());
-            return list;
         }
+        if (sender.hasPermission("staffmode.reload")) {
+            list.add("reload");
+            list.add(sender.getName());
+        }
+        list.add(sender.getName());
+        return list;
     }
 }

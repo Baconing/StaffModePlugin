@@ -1,4 +1,4 @@
 databaseurl: "jdbc:mysql://localhost:3306/database?user=user&password=pass"
-tablename: staffmode_users
 
+# either put a gamemode or NOCHANGE to keep current gamemode
 staffmodegamemode: SPECTATOR

@@ -7,6 +7,7 @@ import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import tk.baconing.staffmode.entities.User;
 
 import javax.annotation.Nullable;
@@ -43,18 +44,17 @@ public class DatabaseManager {
 
     public static class DatabaseQueries {
 
-        public static void enableStaffMode(User user, Player player, String serializedData) {
+        public static void enableStaffMode(@NotNull User user, @NotNull Player player, @NotNull String serializedData) {
             user.setStaffMode(true);
             user.setSerializedData(serializedData);
         }
 
-        public static String disableStaffMode(User user, Player player) {
-            //TODO
+        public static String disableStaffMode(@NotNull User user) {
             user.setStaffMode(false);
             return user.getSerializedData();
         }
 
-        public static void createUser(User user) {
+        public static void createUser(@NotNull User user) {
             userDao = DatabaseManager.getUserDao();
             try {
                 userDao.create(user);
@@ -63,7 +63,7 @@ public class DatabaseManager {
             }
         }
 
-        public static void updateUser(User user) {
+        public static void updateUser(@NotNull User user) {
             userDao = DatabaseManager.getUserDao();
             try {
                 userDao.update(user);
@@ -72,7 +72,8 @@ public class DatabaseManager {
             }
         }
 
-        public static User getUser(Player p) {
+        @NotNull
+        public static User getUser(@NotNull Player p) {
             if (getUserByName(p.getName()) == null && getUserByUUID(p.getUniqueId().toString()) == null) {
                 // create new user
                 User u = new User();
@@ -82,17 +83,19 @@ public class DatabaseManager {
                 createUser(u);
                 return u;
             }
-            return getUserByName(p.getName()) != null ? getUserByName(p.getName()) : getUserByUUID(p.getUniqueId().toString());
+            User u = getUserByName(p.getName()) != null ? getUserByName(p.getName()) : getUserByUUID(p.getUniqueId().toString());
+            assert u != null;
+            return u;
         }
 
         @Nullable
-        public static User getUser(int id) {
+        public static User getUser(@NotNull Integer id) {
             return getUserByID(id);
         }
 
 
         @Nullable
-        private static User getUserByName(String name) {
+        private static User getUserByName(@NotNull String name) {
             userDao = DatabaseManager.getUserDao();
             try {
                 QueryBuilder<User, Integer> qb = userDao.queryBuilder();
