@@ -3,7 +3,7 @@ version: '${project.version}'
 main: tk.baconing.staffmode.StaffMode
 api-version: 1.19
 prefix: "StaffMode"
-depend: [  ]
+depend: [ LuckPerms ]
 softdepend: [ PlaceholderAPI ]
 authors: [ Baconing ]
 description: Plugin that sets a LuckPerms context when a player does /staffmode.

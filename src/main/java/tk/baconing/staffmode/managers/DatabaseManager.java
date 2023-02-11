@@ -21,6 +21,7 @@ public class DatabaseManager {
         DatabaseManager.databaseUrl = databaseUrl;
         connectionSource = new JdbcConnectionSource(databaseUrl);
         userDao = DaoManager.createDao(connectionSource, User.class);
+        // TODO: setup custom table name
         TableUtils.createTableIfNotExists(connectionSource, User.class);
     }
 
@@ -62,8 +63,36 @@ public class DatabaseManager {
             }
         }
 
+        public static void updateUser(User user) {
+            userDao = DatabaseManager.getUserDao();
+            try {
+                userDao.update(user);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        public static User getUser(Player p) {
+            if (getUserByName(p.getName()) == null && getUserByUUID(p.getUniqueId().toString()) == null) {
+                // create new user
+                User u = new User();
+                u.setUsername(p.getName());
+                u.setUuid(p.getUniqueId().toString());
+                u.setStaffMode(false);
+                createUser(u);
+                return u;
+            }
+            return getUserByName(p.getName()) != null ? getUserByName(p.getName()) : getUserByUUID(p.getUniqueId().toString());
+        }
+
         @Nullable
-        public static User getUserByName(String name) {
+        public static User getUser(int id) {
+            return getUserByID(id);
+        }
+
+
+        @Nullable
+        private static User getUserByName(String name) {
             userDao = DatabaseManager.getUserDao();
             try {
                 QueryBuilder<User, Integer> qb = userDao.queryBuilder();
@@ -75,7 +104,7 @@ public class DatabaseManager {
         }
 
         @Nullable
-        public static User getUserByUUID(String uuid) {
+        private static User getUserByUUID(String uuid) {
             userDao = DatabaseManager.getUserDao();
             try {
                 QueryBuilder<User, Integer> qb = userDao.queryBuilder();
@@ -87,7 +116,7 @@ public class DatabaseManager {
         }
 
         @Nullable
-        public static User getUserByID(int id) {
+        private static User getUserByID(int id) {
             //TODO
             userDao = DatabaseManager.getUserDao();
             try {

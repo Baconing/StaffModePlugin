@@ -1,11 +1,12 @@
 package tk.baconing.staffmode.entities;
 
+import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import javax.annotation.Nullable;
 
-@DatabaseTable
+@DatabaseTable()
 public class User {
     @DatabaseField(generatedId = true, canBeNull = false)
     private int id;
@@ -16,7 +17,7 @@ public class User {
     @DatabaseField(canBeNull = false)
     private String username;
 
-    @DatabaseField()
+    @DatabaseField(dataType = DataType.LONG_STRING)
     private @Nullable String serializedData;
 
     @DatabaseField(canBeNull = false)
