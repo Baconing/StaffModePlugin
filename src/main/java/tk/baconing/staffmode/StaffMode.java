@@ -5,6 +5,7 @@ import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -19,6 +20,8 @@ import tk.baconing.staffmode.managers.StaffModeManager;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class StaffMode extends JavaPlugin {
     private static StaffMode plugin;
@@ -55,17 +58,31 @@ public final class StaffMode extends JavaPlugin {
         Bukkit.getPluginCommand("staffmode").setExecutor(new StaffModeCommand());
         Bukkit.getPluginCommand("staffmode").setTabCompleter(new StaffModeTabComplete());
 
+        List<Player> removeQueue = new ArrayList();
         // just a really stupid thing
         BukkitRunnable checkperms = new BukkitRunnable() {
             @Override
             public void run() {
                 Bukkit.getOnlinePlayers().forEach(player -> {
+                    if (player.hasPermission("staffmode.toggle")) return;
                     User u = DatabaseManager.DatabaseQueries.getUser(player);
-                    if (!(player.hasPermission("staffmode.toggle")) && u.isStaffMode() && Boolean.FALSE.equals(u.isEnabledByOther())) StaffModeManager.disableStaffMode(player, u);
+                    if (!(player.hasPermission("staffmode.toggle")) && u.isStaffMode() && Boolean.FALSE.equals(u.isEnabledByOther())) removeQueue.add(player);
                 });
             }
         };
-        checkperms.runTaskTimer(this, 1, 100);
+        BukkitRunnable checkQueue = new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!(removeQueue.isEmpty())) {
+                    for (Player p : removeQueue) {
+                        StaffModeManager.disableStaffMode(p, DatabaseManager.DatabaseQueries.getUser(p));
+                        removeQueue.remove(p);
+                    }
+                }
+            }
+        };
+        checkperms.runTaskTimerAsynchronously(this, 1, 100);
+        checkQueue.runTaskTimer(this, 1, 100);
     }
 
     @Override
