@@ -6,10 +6,10 @@
 
     <groupId>tk.baconing</groupId>
     <artifactId>staffmode</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <packaging>jar</packaging>
 
-    <name>Staffmode</name>
+    <name>StaffMode</name>
 
     <description>Plugin that sets a context when a player does /staffmode.</description>
     <properties>

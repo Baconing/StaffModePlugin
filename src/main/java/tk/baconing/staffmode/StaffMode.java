@@ -70,19 +70,19 @@ public final class StaffMode extends JavaPlugin {
                 });
             }
         };
-        BukkitRunnable checkQueue = new BukkitRunnable() {
+        BukkitRunnable checkqueue = new BukkitRunnable() {
             @Override
             public void run() {
                 if (!(removeQueue.isEmpty())) {
                     for (Player p : removeQueue) {
                         StaffModeManager.disableStaffMode(p, DatabaseManager.DatabaseQueries.getUser(p));
-                        removeQueue.remove(p);
                     }
                 }
+                removeQueue.clear();
             }
         };
-        checkperms.runTaskTimerAsynchronously(this, 1, 100);
-        checkQueue.runTaskTimer(this, 1, 100);
+        checkperms.runTaskTimerAsynchronously(this, 2, 10);
+        checkqueue.runTaskTimer(this, 1, 10);
     }
 
     @Override
