@@ -9,7 +9,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.Collection;
 
 public class PlayerSerializer{
@@ -21,7 +20,10 @@ public class PlayerSerializer{
 
         obj.put("inventory", inventory);
 
-        obj.put("exp", player.getTotalExperience());
+        obj.put("totExp", player.getTotalExperience());
+        obj.put("exp", player.getExp());
+        obj.put("level", player.getLevel());
+
         obj.put("health", player.getHealth());
         obj.put("foodLevel", player.getFoodLevel());
         obj.put("air", player.getRemainingAir());
@@ -46,7 +48,9 @@ public class PlayerSerializer{
         ItemStack[] inventory = inventoryArray[0];
         ItemStack[] armor = inventoryArray[1];
 
-        int exp = obj.getInt("exp");
+        int totExp = obj.getInt("totExp");
+        float exp = obj.getFloat("exp");
+        int level = obj.getInt("level");
         double health = obj.getDouble("health");
         int foodLevel = obj.getInt("foodLevel");
         int air = obj.getInt("air");
@@ -60,7 +64,9 @@ public class PlayerSerializer{
         player.getInventory().setContents(inventory);
         player.getInventory().setArmorContents(armor);
 
-        player.setTotalExperience(exp);
+        player.setTotalExperience(totExp);
+        player.setExp(exp);
+        player.setLevel(level);
         player.setHealth(health);
         player.setFoodLevel(foodLevel);
         player.setRemainingAir(air);
