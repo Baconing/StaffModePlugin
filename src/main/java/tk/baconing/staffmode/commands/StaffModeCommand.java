@@ -37,8 +37,13 @@ public class StaffModeCommand implements CommandExecutor {
                 }
                 if (p.getName().equals(sender.getName())) toggledByOther = false;
             }
-        } else if (sender.hasPermission("staffmode.toggle")) {
+        } else if (sender.hasPermission("staffmode.toggle") && sender instanceof Player) {
             p = (Player) sender;
+        }
+
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(ChatColor.RED + "You must be a player to run this command.");
+            return true;
         }
 
         assert p != null;
