@@ -12,12 +12,14 @@ import tk.baconing.staffmode.serializers.PlayerSerializer;
 public class StaffModeManager {
     public static void enableStaffMode(Player player, User user) {
         String data = PlayerSerializer.serialize(player);
-        StaffModeEnableEvent e = new StaffModeEnableEvent(player, user, data);
+        StaffModeEnableEvent e = new StaffModeEnableEvent(player, user, data, false);
         Bukkit.getPluginManager().callEvent(e);
         if (!(e.isCancelled())) {
             user.setSerializedData(data);
             player.getInventory().clear();
             player.setExp(0);
+            player.setTotalExperience(0);
+            player.setLevel(0);
             player.getActivePotionEffects().forEach(potionEffect -> player.removePotionEffect(potionEffect.getType()));
             if (!(StaffMode.get().getConfig().getString("staffmodegamemode").equalsIgnoreCase("NOCHANGE"))) {
                 player.setGameMode(GameMode.valueOf(StaffMode.get().getConfig().getString("staffmodegamemode")));
@@ -53,12 +55,14 @@ public class StaffModeManager {
 
     public static void enableStaffMode(Player player, Player sender, User user) {
         String data = PlayerSerializer.serialize(player);
-        StaffModeEnableEvent e = new StaffModeEnableEvent(player, user, data);
+        StaffModeEnableEvent e = new StaffModeEnableEvent(player, user, data, true);
         Bukkit.getPluginManager().callEvent(e);
         if (!(e.isCancelled())) {
             user.setSerializedData(data);
             player.getInventory().clear();
             player.setExp(0);
+            player.setTotalExperience(0);
+            player.setLevel(0);
             player.getActivePotionEffects().forEach(potionEffect -> player.removePotionEffect(potionEffect.getType()));
             player.setGameMode(GameMode.valueOf(StaffMode.get().getConfig().getString("staffmodegamemode")));
             player.sendMessage(ParseManager.parse(StaffMode.getMessagesConfig().getString("staffmodeEnabled"), player));
