@@ -12,6 +12,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import tk.baconing.staffmode.commands.StaffModeCommand;
 import tk.baconing.staffmode.commands.StaffModeTabComplete;
 import tk.baconing.staffmode.entities.User;
+import tk.baconing.staffmode.listeners.BukkitListener;
 import tk.baconing.staffmode.managers.ContextManager;
 import tk.baconing.staffmode.managers.DatabaseManager;
 import tk.baconing.staffmode.managers.PlaceholderManager;
@@ -57,6 +58,9 @@ public final class StaffMode extends JavaPlugin {
         // register commands
         Bukkit.getPluginCommand("staffmode").setExecutor(new StaffModeCommand());
         Bukkit.getPluginCommand("staffmode").setTabCompleter(new StaffModeTabComplete());
+
+        // register events
+        Bukkit.getPluginManager().registerEvents(new BukkitListener(), this);
 
         List<Player> removeQueue = new ArrayList();
         // just a really stupid thing

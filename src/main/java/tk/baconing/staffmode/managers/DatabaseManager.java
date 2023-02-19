@@ -12,17 +12,20 @@ import tk.baconing.staffmode.entities.User;
 
 import javax.annotation.Nullable;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DatabaseManager {
     private static String databaseUrl;
     private static ConnectionSource connectionSource;
     private static Dao<User, Integer> userDao;
+    private static Map<Player, User> cache;
 
     public static void initialize(String databaseUrl) throws SQLException {
+        cache = new HashMap<>();
         DatabaseManager.databaseUrl = databaseUrl;
         connectionSource = new JdbcConnectionSource(databaseUrl);
         userDao = DaoManager.createDao(connectionSource, User.class);
-        // TODO: setup custom table name
         TableUtils.createTableIfNotExists(connectionSource, User.class);
     }
 
@@ -40,6 +43,10 @@ public class DatabaseManager {
 
     public static void setDatabaseUrl(String databaseUrl) {
         DatabaseManager.databaseUrl = databaseUrl;
+    }
+
+    public static Map<Player, User> getCache() {
+        return cache;
     }
 
     public static class DatabaseQueries {
@@ -74,6 +81,7 @@ public class DatabaseManager {
 
         @NotNull
         public static User getUser(@NotNull Player p) {
+            if (cache.containsKey(p)) return cache.get(p);
             if (getUserByName(p.getName()) == null && getUserByUUID(p.getUniqueId().toString()) == null) {
                 // create new user
                 User u = new User();
