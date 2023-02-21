@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -25,6 +26,7 @@ public class PlayerSerializer{
         obj.put("level", player.getLevel());
 
         obj.put("health", player.getHealth());
+        obj.put("maxhealth", player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
         obj.put("foodLevel", player.getFoodLevel());
         obj.put("air", player.getRemainingAir());
         obj.put("potEffects", PotSerializer.serialize(player.getActivePotionEffects()));
@@ -52,6 +54,7 @@ public class PlayerSerializer{
         float exp = obj.getFloat("exp");
         int level = obj.getInt("level");
         double health = obj.getDouble("health");
+        double maxHealth = obj.getDouble("maxhealth");
         int foodLevel = obj.getInt("foodLevel");
         int air = obj.getInt("air");
         Collection<PotionEffect> potEffects = PotSerializer.deserialize(obj.getString("potEffects"));
@@ -67,6 +70,7 @@ public class PlayerSerializer{
         player.setTotalExperience(totExp);
         player.setExp(exp);
         player.setLevel(level);
+        player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(maxHealth);
         player.setHealth(health);
         player.setFoodLevel(foodLevel);
         player.setRemainingAir(air);

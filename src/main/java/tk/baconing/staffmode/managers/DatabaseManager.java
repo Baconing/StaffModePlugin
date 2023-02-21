@@ -8,9 +8,10 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import tk.baconing.staffmode.StaffMode;
 import tk.baconing.staffmode.entities.User;
 
-import javax.annotation.Nullable;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,8 +24,14 @@ public class DatabaseManager {
 
     public static void initialize(String databaseUrl) throws SQLException {
         cache = new HashMap<>();
-        DatabaseManager.databaseUrl = databaseUrl;
-        connectionSource = new JdbcConnectionSource(databaseUrl);
+        if (databaseUrl.equalsIgnoreCase("file")) {
+            String url = "jdbc:sqlite:" + StaffMode.get().getDataFolder().toPath() + "/database.db";
+            DatabaseManager.databaseUrl = url;
+            StaffMode.get().getLogger().info(url);
+        } else {
+            DatabaseManager.databaseUrl = databaseUrl;
+        }
+        connectionSource = new JdbcConnectionSource(DatabaseManager.databaseUrl);
         userDao = DaoManager.createDao(connectionSource, User.class);
         TableUtils.createTableIfNotExists(connectionSource, User.class);
     }
@@ -50,17 +57,6 @@ public class DatabaseManager {
     }
 
     public static class DatabaseQueries {
-
-        public static void enableStaffMode(@NotNull User user, @NotNull Player player, @NotNull String serializedData) {
-            user.setStaffMode(true);
-            user.setSerializedData(serializedData);
-        }
-
-        public static String disableStaffMode(@NotNull User user) {
-            user.setStaffMode(false);
-            return user.getSerializedData();
-        }
-
         public static void createUser(@NotNull User user) {
             userDao = DatabaseManager.getUserDao();
             try {

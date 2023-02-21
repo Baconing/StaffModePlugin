@@ -1,11 +1,12 @@
 package tk.baconing.staffmode.events;
 
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 import tk.baconing.staffmode.entities.User;
 
 public class StaffModeEnableEvent extends StaffModeEvent {
-    public String serializedData;
-    public boolean isEnabledByOther;
+    public @Nullable String serializedData;
+    public @Nullable Boolean isEnabledByOther;
 
     public StaffModeEnableEvent(Player player, User user, String serializedData, boolean isEnabledByOther) {
         super(player, user);
@@ -13,7 +14,12 @@ public class StaffModeEnableEvent extends StaffModeEvent {
         this.isEnabledByOther = isEnabledByOther;
     }
 
-    public String getSerializedData() {
+    public StaffModeEnableEvent(Player player, User user, boolean isEnabledByOther) {
+        super(player, user);
+        this.isEnabledByOther = isEnabledByOther;
+    }
+
+    public @Nullable String getSerializedData() {
         return this.serializedData;
     }
 
@@ -21,11 +27,11 @@ public class StaffModeEnableEvent extends StaffModeEvent {
         this.serializedData = serializedData;
     }
 
-    public boolean isEnabledByOther() {
+    public @Nullable Boolean isEnabledByOther() {
         return isEnabledByOther;
     }
 
-    public void setEnabledByOther(boolean enabledByOther) {
+    public void setEnabledByOther(@Nullable boolean enabledByOther) {
         isEnabledByOther = enabledByOther;
     }
 }

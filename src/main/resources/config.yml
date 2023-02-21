@@ -1,4 +1,8 @@
-databaseurl: "jdbc:mysql://localhost:3306/database?user=user&password=pass"
+#either a JDBC url or file
+# jdbc:mysql://localhost:3306/database?user=user&password=pass
+databaseurl: file
+
+serializePlayer: yes
 
 # either put a gamemode or NOCHANGE to keep current gamemode
 staffmodegamemode: SPECTATOR
