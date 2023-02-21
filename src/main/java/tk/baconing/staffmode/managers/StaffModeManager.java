@@ -11,11 +11,17 @@ import tk.baconing.staffmode.serializers.PlayerSerializer;
 
 public class StaffModeManager {
     public static void enableStaffMode(Player player, User user) {
-        String data = PlayerSerializer.serialize(player);
-        StaffModeEnableEvent e = new StaffModeEnableEvent(player, user, data, false);
+        StaffModeEnableEvent e = new StaffModeEnableEvent(player, user, false);
+        String data = null;
+        if (StaffMode.get().getConfig().getBoolean("serializePlayer")) {
+            data = PlayerSerializer.serialize(player);
+        }
+        e.setSerializedData(data);
         Bukkit.getPluginManager().callEvent(e);
         if (!(e.isCancelled())) {
-            user.setSerializedData(data);
+            if (StaffMode.get().getConfig().getBoolean("serializePlayer")) {
+                user.setSerializedData(data);
+            }
             player.getInventory().clear();
             player.setExp(0);
             player.setTotalExperience(0);
@@ -40,10 +46,17 @@ public class StaffModeManager {
         StaffModeDisableEvent e = new StaffModeDisableEvent(player, user);
         Bukkit.getPluginManager().callEvent(e);
         if (!(e.isCancelled())) {
-            PlayerSerializer.deSerialize(user.getSerializedData(), player);
+            try {
+                if (StaffMode.get().getConfig().getBoolean("serializePlayer") && user.getSerializedData() != null && !(user.getSerializedData().equalsIgnoreCase(""))) {
+                    PlayerSerializer.deSerialize(user.getSerializedData(), player);
+                }
+            } catch (Exception ex) {
+                return;
+            }
             player.sendMessage(ParseManager.parse(StaffMode.getMessagesConfig().getString("staffmodeDisabled"), player));
             user.setStaffMode(false);
             user.setEnabledByOther(null);
+            user.setSerializedData(null);
             DatabaseManager.DatabaseQueries.updateUser(user);
             Bukkit.getServer().getOnlinePlayers().forEach(p -> {
                 if (p.hasPermission("staffmode.alert") && !(p.equals(player))) {
@@ -54,8 +67,12 @@ public class StaffModeManager {
     }
 
     public static void enableStaffMode(Player player, Player sender, User user) {
-        String data = PlayerSerializer.serialize(player);
-        StaffModeEnableEvent e = new StaffModeEnableEvent(player, user, data, true);
+        StaffModeEnableEvent e = new StaffModeEnableEvent(player, user, false);
+        String data = null;
+        if (StaffMode.get().getConfig().getBoolean("serializePlayer")) {
+            data = PlayerSerializer.serialize(player);
+        }
+        e.setSerializedData(data);
         Bukkit.getPluginManager().callEvent(e);
         if (!(e.isCancelled())) {
             user.setSerializedData(data);
@@ -71,7 +88,7 @@ public class StaffModeManager {
             user.setEnabledByOther(true);
             DatabaseManager.DatabaseQueries.updateUser(user);
             Bukkit.getServer().getOnlinePlayers().forEach(p -> {
-                if (p.hasPermission("staffmode.alert") && !(p.equals(player))&& !(p.equals(sender))) {
+                if (p.hasPermission("staffmode.alert") && !(p.equals(player)) && !(p.equals(sender))) {
                     p.sendMessage(ParseManager.parse(StaffMode.getMessagesConfig().getString("staffmodeBroadcastEnabled"), player));
                 }
             });
@@ -82,11 +99,19 @@ public class StaffModeManager {
         StaffModeDisableEvent e = new StaffModeDisableEvent(player, user);
         Bukkit.getPluginManager().callEvent(e);
         if (!(e.isCancelled())) {
-            PlayerSerializer.deSerialize(user.getSerializedData(), player);
+            try {
+                if (StaffMode.get().getConfig().getBoolean("serializePlayer") && user.getSerializedData() != null && !(user.getSerializedData().equalsIgnoreCase(""))) {
+                    PlayerSerializer.deSerialize(user.getSerializedData(), player);
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return;
+            }
             player.sendMessage(ParseManager.parse(StaffMode.getMessagesConfig().getString("staffmodeDisabled"), player));
             sender.sendMessage(ParseManager.parse(StaffMode.getMessagesConfig().getString("staffmodeDisabledByOther"), player));
             user.setStaffMode(false);
             user.setEnabledByOther(null);
+            user.setSerializedData(null);
             DatabaseManager.DatabaseQueries.updateUser(user);
             Bukkit.getServer().getOnlinePlayers().forEach(p -> {
                 if (p.hasPermission("staffmode.alert") && !(p.equals(player)) && !(p.equals(sender))) {
