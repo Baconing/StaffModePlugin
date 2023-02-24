@@ -19,7 +19,7 @@
     <url>https://baconing.tk</url>
 
     <build>
-        <finalName>StaffModeLegacy</finalName>
+        <finalName>StaffModeLegacy-${project.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
