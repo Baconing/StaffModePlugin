@@ -1,7 +1,7 @@
 name: StaffMode
 version: '${project.version}'
 main: tk.baconing.staffmode.StaffMode
-api-version: 1.13.2
+api-version: 1.13
 prefix: "StaffMode"
 depend: [ LuckPerms ]
 softdepend: [ PlaceholderAPI ]
