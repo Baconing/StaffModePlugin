@@ -2,7 +2,7 @@ package tk.baconing.staffmode.managers;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
-import com.j256.ormlite.jdbc.JdbcConnectionSource;
+import com.j256.ormlite.jdbc.JdbcPooledConnectionSource;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
@@ -31,7 +31,7 @@ public class DatabaseManager {
         } else {
             DatabaseManager.databaseUrl = databaseUrl;
         }
-        connectionSource = new JdbcConnectionSource(DatabaseManager.databaseUrl);
+        connectionSource = new JdbcPooledConnectionSource(DatabaseManager.databaseUrl);
         userDao = DaoManager.createDao(connectionSource, User.class);
         TableUtils.createTableIfNotExists(connectionSource, User.class);
     }
